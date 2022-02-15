@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="js/angular.min.js"></script>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+ <!-- Option 1: Bootstrap Bundle with Popper -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+
+      <title>Document</title>
+      <script>
+          var mymodule=angular.module("myOwnModule",[]);
+          var myController=mymodule.controller("myController1",function($scope,$http){
+
+                $scope.fName="Rajesh Bansal";
+                $scope.fn="Fill F.Name Here";
+                $scope.ln="Fill L. Name";
+                $scope.full;
+                $scope.doJoin=function()
+                {
+                    $scope.full= $scope.fn+" "+$scope.ln;
+                }
+
+                $scope.jsonAry = [{
+                    name: "laptop",
+                    price: 80000
+                },
+                {
+                    name: "mobile",
+                    price: 20000
+                },
+                {
+                    name: "Keyboard",
+                    price: 50000
+                },
+                {
+                    name: "Mouse",
+                    price: 40000
+                }
+            ];
+
+            $scope.doDelete=function(emal)
+            {
+                if(confirm("R U Sure?")==false)
+                        return;
+                   var url="/deleteAjax?x="+emal;
+                   $http.get(url).then(kuchFxGood,kuchFxBad); 
+                      function kuchFxGood(jsonResponse)
+                      {
+                          alert(JSON.stringify(jsonResponse.data));
+                          $scope.doFetchAll();
+                        
+                      }
+                      function kuchFxBad(jsonResponse)
+                      {
+                          alert(JSON.stringify(jsonResponse.data));
+                      }
+
+            }
+              
+            $scope.selItem=$scope.jsonAry[0].name;
+            
+            $scope.doShowSelected=function()
+            {
+                alert($scope.selItem);
+            }
+
+            $scope.jsonAryOrg;
+            $scope.doFetchAll=function()
+                {
+                   
+                        alert($scope.selCity);
+                    var url="/showSome?selCity="+$scope.selCity;
+                      $http.get(url).then(kuchFxGood,kuchFxBad); 
+                      function kuchFxGood(jsonResponse)
+                      {
+                         // alert(JSON.stringify(jsonResponse.data));
+                          $scope.jsonAryOrg=jsonResponse.data;
+                      }
+                      function kuchFxBad(jsonResponse)
+                      {
+                          alert(JSON.stringify(jsonResponse.data));
+                      }
+
+
+                }
+                $scope.doSare=function()
+                {
+                   
+                        
+                    var url="/showAll";
+                      $http.get(url).then(kuchFxGood,kuchFxBad); 
+                      function kuchFxGood(jsonResponse)
+                      {
+                         // alert(JSON.stringify(jsonResponse.data));
+                          $scope.jsonAryOrg=jsonResponse.data;
+                      }
+                      function kuchFxBad(jsonResponse)
+                      {
+                          alert(JSON.stringify(jsonResponse.data));
+                      }
+
+
+                }
+
+//----------------------------------
+            $scope.jsonAryCity;
+            $scope.doFetchAllCity=function()
+                {
+                   
+
+                    var url="/fetchCities";
+                      $http.get(url).then(kuchFxGood,kuchFxBad); 
+                      function kuchFxGood(jsonResponse)
+                      {
+                         alert(JSON.stringify(jsonResponse.data));
+                          $scope.jsonAryCity=jsonResponse.data;
+                      }
+                      function kuchFxBad(jsonResponse)
+                      {
+                          alert(JSON.stringify(jsonResponse.data));
+                      }
+
+
+                }
+
+                $scope.selCity;
+
+          })
+
+          
+      </script>
+</head>
+<!-- Here View is attached with controller -->
+<body ng-app="myOwnModule" ng-controller="myController1" ng-init="doFetchAllCity();">  <!--   ng-init="doFetchAll();"-->
+    First Name=<input type="text" ng-model="fName">
+    <br>
+    {{fName}}
+    <hr> <hr>
+    F.Name <input type="text" ng-model="fn"> <br>
+    L.Name <input type="text" ng-model="ln"> <br>
+    <input type="button" ng-click="doJoin();" value="Click">
+    Full Name <input type="text" ng-model="full"> <br>
+    
+    <hr>
+   <center>
+       <p>
+           <select ng-change="doShowSelected();" ng-model="selItem" >
+               <option  ng-repeat="obj in jsonAry" value={{obj.name}}> {{obj.name}} </option>
+               
+           </select>
+       </p>
+       All Records
+       <table width="400" border="1">
+            <tr ng-repeat="obj in jsonAry">
+                <td>{{$index+1}}</td>
+                   <td>{{obj.name}}</td> 
+                   <td>{{obj.price}}</td>
+                   <td align="center">
+                       <input type="button" value="Delete" ng-click="doDelete(obj.name);">
+                   </td>
+
+            </tr>
+       </table>
+       <hr>
+       <center>
+           <hr><hr>
+        
+           <p>
+            City:
+            <select ng-model="selCity">
+                <option  ng-repeat="obj in jsonAryCity" value={{obj.city}}> {{obj.city}} </option>
+                
+            </select>
+        </p>   
+        
+        <input type="button" value="Fetch All Records" ng-click="doFetchAll();">
+        <input type="button" value="Fetch All Records" ng-click="doSare();">
+           
+       
+           <p>
+               <center>
+                All Records
+                <table width="400" border="1">
+                     <tr ng-repeat="obj in jsonAryOrg">
+                         <td>{{$index+1}}</td>
+                            <td>{{obj.emailid}}</td> 
+                            
+                            <td>{{obj.pwd}}</td>
+                            <td>{{obj.city}}</td>
+                            <td align="center">
+                                    <img src="uploads/{{obj.picpath}}" width="50" height="50" alt="">
+                            </td>
+                            <td>{{obj.picpath}}</td>
+
+                            <td align="center">
+                                <input type="button" value="Delete" ng-click="doDelete(obj.emailid);">
+                            </td>
+         
+                     </tr>
+                </table>
+               </center>
+           </p>
+       </center>
+   </center>
+   <div class="container">
+        <div class="row">
+            <div class="col-md-3" ng-repeat="obj in jsonAryOrg">
+                <div class="card" >
+                    <img src="uploads/{{obj.picpath}}" height="100" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h6 class="card-title">Email Id={{obj.emailid}}</h6>
+                      <h6 class="card-title">City={{obj.city}}</h6>
+
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</body>
+</html>

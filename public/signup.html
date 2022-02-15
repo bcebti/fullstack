@@ -1,0 +1,188 @@
+
+<html lang="en">
+<head>
+    <title>Document</title>
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+     <script src="js/jquery-1.8.2.min.js"></script>
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+ <!-- Option 1: Bootstrap Bundle with Popper -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+     
+    <link href="css/style.css" rel="stylesheet">
+    <script>
+        function doShowPrev(ref) 
+        {
+            //alert();
+            var image = document.getElementById('prev');
+            image.src = URL.createObjectURL(ref.files[0]);
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("#btnFetch").click(function(){
+               //AJAX Call
+               var urlWithData="/fetchARecord?kuchBhiUid="+$("#txtUid").val();//+"&pwd="+$("#pwd").val();;
+               $.get(urlWithData,function(response){
+                  alert(JSON.stringify(response));
+
+                  $("#txtPwd").val(response[0].pwd);//pwd: col. name in mysql table
+                  $("#prev").prop("src","uploads/"+response[0].picpath);
+                  $("#jasoos").val(response[0].picpath);
+
+
+               });
+
+               //$.get();
+            });
+        });
+    </script>
+</head>
+<body>
+<!-- 
+    give name to all text boxes
+    button type="submit"
+    table must be inside form tag- Zaroori nahi Bahuuuut Zaruri Haiiiii
+
+    ?txtUid=Rajesh&txtPwd=bansal called query string
+
+    {"txtUid":"Rajesh","txtPwd":"bansal"}: JSON (java script object notaion)
+ -->
+    <center>
+        <fieldset style="width:400px";>
+            <legend>Signup Here</legend>
+            <form method="post" enctype="multipart/form-data">  <!-- "get" is by default -->
+                <input type="hidden" id="jasoos" name="jasoos">
+
+                <table>
+                    <tr>
+                        <td align="center">
+                              <h3>Signup Here</h3>  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User Id</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="txtUid" name="txtUid"> 
+                            <!-- No use of "submit" in AJAX -->
+                            <input type="button" id="btnFetch"  value="Fetch" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="password" name="txtPwd" id="txtPwd">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            Profile Pic
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="file" name="profilePic" onchange="doShowPrev(this);">
+                            <br>
+                            <img src="uploads/nopic.png" id="prev" alt="" width="100" height="100" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Plan</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="plan" value="Gold">Gold
+                            <input type="radio" name="plan" value="Silver">Silver
+                            <input type="radio" name="plan" value="Trail">Trail
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Having Account @
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" value="Meta" name="media">FaceBook
+                            <input type="checkbox" value="Google" name="media">Google
+                            <input type="checkbox" value="Instagram" name="media">Insta
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            City
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="city">
+                                <option value="None">Select</option>
+                                <option value="Bathinda">Bathinda</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Patiala">Patiala</option>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Visited Cities
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="visited" size="4" multiple >
+                                <option value="None">Select</option>
+                                <option value="Bathinda">Bathinda</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Patiala">Patiala</option>
+
+                            </select>
+                        </td>
+                    </tr>
+                  
+                    <tr>
+                        <td>
+                            Comments-Dil Ki Baat
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea name="comments" cols="30" rows="4">
+
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                                <input type="submit" formaction="/signup-process-2" value="Signup" class="btn btn-primary">
+                                <input type="submit" formaction="/update-profile" value="Update" class="btn btn-primary">
+                                <input type="submit" formaction="/showAll" value="Show All" class="btn btn-danger">
+                                <input type="submit" formaction="/deleteRecord" value="Delete" class="btn btn-primary">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </fieldset>
+    </center>    
+</body>
+</html>
+<!-- 
+    1. method should be POST
+    2. enctype="multipart/form-data" in form tag
+    3. name of file control
+    4. npm install express-fileupload module
+    5. create a folder "uploads" to store the uploaded file
+ -->
