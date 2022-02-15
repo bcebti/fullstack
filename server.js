@@ -3,10 +3,11 @@ var path=require("path");
 var fileUpload=require("express-fileupload");
 var mysql=require("mysql");
 
+
 //@ BangloreComputerEducation.com    Bathinda-9872246056
 var app=express();
-
-app.listen(2002,function(){
+const port=process.env.PORT || 3003;
+app.listen(port,function(){
     console.log("Server Started and ready for listening requests from Client-chrome");
 });
 
